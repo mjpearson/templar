@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Bootstrap-Templar</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">        
+        <link href="bootstrap.css" rel="stylesheet">
+        <!-- link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet" -->
+        <link href="css/bootstrap.templar.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="content">
+                <div class="span12">
+                    <br><br>
+                    <blockquote>
+                        <p class="lead">Templar</p>
+                        Inline tagged templating and template compliation from text inputs and hierarchical data.
+                        <em>
+                            Supports search, template normalization.                            
+                            <br/>
+                            eg
+                            "Thanks for ordering a
+                            <div class="btn-group">
+                                <span>
+                                    <select id="ex1" class="multiselect">
+                                        <optgroup label="toppings">
+                                            <option value="cheese">Cheese</option>
+                                            <option value="tomatoes">Tomatoes</option>
+                                            <option value="mozarella">Mozzarella</option>
+                                            <option value="mushrooms">Mushrooms</option>
+                                            <option value="pepperoni">Pepperoni</option>
+                                            <option value="onions">Onions</option>
+                                        </optgroup>
+
+                                        <optgroup label="base">
+                                            <option value="thin">Thin</option>
+                                            <option value="pie">Pie</option>
+                                        </optgroup>
+                                    </select>
+                                </span>
+                            </div> centric pizza on
+                            <div class="btn-group">
+                                <span>
+                                    <select id="ex1" class="multiselect">
+                                        <optgroup label="toppings">
+                                            <option value="cheese">Cheese</option>
+                                            <option value="tomatoes">Tomatoes</option>
+                                            <option value="mozarella">Mozzarella</option>
+                                            <option value="mushrooms">Mushrooms</option>
+                                            <option value="pepperoni">Pepperoni</option>
+                                            <option value="onions">Onions</option>
+                                        </optgroup>
+
+                                        <optgroup label="base">
+                                            <option value="thin" selected>Thin</option>
+                                            <option value="pie">Pie</option>
+                                        </optgroup>
+                                    </select>
+                                </span>
+                            </div>
+                            <br/>
+                            To generate : "Thanks for ordering a {{cheese}} centric pizza on {{thin}}"
+                        </em>
+                    </blockquote>
+
+                    <div class="templar" style="border-color: rgba(82, 168, 236, 0.8); border-style: solid;border-width: 1px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>        
+        <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-dropdown.js"></script -->
+
+        <script src="jquery.min.js"></script>        
+        <script src="bootstrap-dropdown.js"></script>
+        
+        <script src="js/bootstrap-templar.js"></script>
+        
+        
+        <script type="text/javascript">
+            $(document).ready(function() {
+                
+                (function($){
+
+    $.fn.autoGrowInput = function(o) {
+
+        o = $.extend({
+            maxWidth: 1000,
+            minWidth: 0,
+            comfortZone: 0
+        }, o);
+
+        this.filter('input:text').each(function(){
+
+            var minWidth = o.minWidth || $(this).width(),
+                val = '',
+                input = $(this),
+                testSubject = $('<tester/>').css({
+                    position: 'absolute',
+                    top: -9999,
+                    left: -9999,
+                    width: 'auto',
+                    fontSize: input.css('fontSize'),
+                    fontFamily: input.css('fontFamily'),
+                    fontWeight: input.css('fontWeight'),
+                    letterSpacing: input.css('letterSpacing'),
+                    whiteSpace: 'nowrap'
+                }),
+                check = function() {
+
+                    if (val === (val = input.val())) {return;}
+
+                    // Enter new content into testSubject
+                    var escaped = val.replace(/&/g, '&amp;').replace(/\s/g,'&nbsp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    testSubject.html(escaped);
+
+                    // Calculate new width + whether to change
+                    var testerWidth = testSubject.width(),
+                        newWidth = (testerWidth + o.comfortZone) >= minWidth ? testerWidth + o.comfortZone : minWidth,
+                        currentWidth = input.width(),
+                        isValidWidthChange = (newWidth < currentWidth && newWidth >= minWidth)
+                                             || (newWidth > minWidth && newWidth < o.maxWidth);
+
+                    // Animate width
+                    if (isValidWidthChange) {
+                        input.width(newWidth);
+                    }
+
+                };
+
+            testSubject.insertAfter(input);
+
+            $(this).bind('keyup keydown blur update', check);
+
+        });
+
+        return this;
+
+    };
+
+})(jQuery);
+                
+                var hierarchyData = {
+                    'toppings' : [
+                        'cheese',
+                        'tomatoes',
+                        'mozzarella',
+                        'mushrooms',
+                        'pepperoni',
+                        'onions'
+                    ],
+                    'base' : [
+                        'thin',
+                        'pie',
+                        'superthick'
+                    ]
+                }
+
+                $(".templar").templar({tags: hierarchyData});
+            });
+        </script>
+    </body>
+</html>

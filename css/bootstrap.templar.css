@@ -1,0 +1,30 @@
+.templar { 
+    cursor: text;
+}
+/*
+.templar input { 
+  background: none transparent; 
+  border: none;
+  outline: none;
+  outline-width: 0;
+  box-shadow: none;
+}
+
+.templar input:focus{
+  background: none transparent; 
+  border: none;
+  outline: none;
+  outline-width: 0;
+  outline: 0;
+  -moz-appearance: none;
+  box-shadow: none;
+}
+*/
+.templar .dropdown-menu li {
+    text-transform: uppercase;
+    margin-left: 10px;
+}
+
+.templar .dropdown-menu li a {
+    text-transform: none;
+}
