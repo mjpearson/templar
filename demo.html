@@ -5,146 +5,191 @@
         <title>Bootstrap-Templar</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
-        <meta name="author" content="">        
+        <meta name="author" content="">
         <link href="bootstrap.css" rel="stylesheet">
         <!-- link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
         <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet" -->
         <link href="css/bootstrap.templar.css" rel="stylesheet">
     </head>
     <body>
+        <a href="https://github.com/mjpearson/bootstrap-templar"><img style="position: absolute; top: 0; right: 0; border: 0;"
+                                                                      src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
         <div class="container">
             <div class="content">
                 <div class="span12">
                     <br><br>
                     <blockquote>
                         <p class="lead">Templar</p>
-                        Inline tagged templating and template compliation from text inputs and hierarchical data.
-                        <em>
-                            Supports search, template normalization.                            
-                            <br/>
-                            eg
-                            "Thanks for ordering a
-                            <div class="btn-group">
-                                <span>
-                                    <select id="ex1" class="multiselect">
-                                        <optgroup label="toppings">
-                                            <option value="cheese">Cheese</option>
-                                            <option value="tomatoes">Tomatoes</option>
-                                            <option value="mozarella">Mozzarella</option>
-                                            <option value="mushrooms">Mushrooms</option>
-                                            <option value="pepperoni">Pepperoni</option>
-                                            <option value="onions">Onions</option>
-                                        </optgroup>
-
-                                        <optgroup label="base">
-                                            <option value="thin">Thin</option>
-                                            <option value="pie">Pie</option>
-                                        </optgroup>
-                                    </select>
-                                </span>
-                            </div> centric pizza on
-                            <div class="btn-group">
-                                <span>
-                                    <select id="ex1" class="multiselect">
-                                        <optgroup label="toppings">
-                                            <option value="cheese">Cheese</option>
-                                            <option value="tomatoes">Tomatoes</option>
-                                            <option value="mozarella">Mozzarella</option>
-                                            <option value="mushrooms">Mushrooms</option>
-                                            <option value="pepperoni">Pepperoni</option>
-                                            <option value="onions">Onions</option>
-                                        </optgroup>
-
-                                        <optgroup label="base">
-                                            <option value="thin" selected>Thin</option>
-                                            <option value="pie">Pie</option>
-                                        </optgroup>
-                                    </select>
-                                </span>
-                            </div>
-                            <br/>
-                            To generate : "Thanks for ordering a {{cheese}} centric pizza on {{thin}}"
-                        </em>
+                        Inline tagged templating and template compliation from text inputs and hierarchical data,
+                        requires <a href="http://api.jquery.com/">jQuery</a>,
+                        <a href="http://twitter.github.io/bootstrap/index.html">Twitter Bootstrap</a>
+                        with <a href="http://twitter.github.io/bootstrap/javascript.html#dropdowns">Dropdowns</a> plugin.
+                        Inspired by <a href="https://github.com/willywos/bangbang">BangBang</a><br/><br/>
+                        Supports search, template (de)normalization, custom template format
                     </blockquote>
 
-                    <div class="templar" style="border-color: rgba(82, 168, 236, 0.8); border-style: solid;border-width: 1px;"></div>
+                </div>
+
+                <div class="span12">
+                    <hr/>
+                    <h4>Try it <small>just start typing, '[' opens the tag menu where you want the tag to appear.</small></h4>
+                    <p>
+                    <div class="templar templar-example"></div>
+
+                    <h4>Generates</h4>
+                    <pre id="template-example-computed"></pre>
+                    </p>
+                    <hr/>
+
+                    <h4>How it works</h4>
+
+                    Templar interpolates a bootstrap-dropdown into your text for easy template variable selection, invoked with
+                    a keypress. Once invoked, it focuses on a search input so search away.  Up/Down/Enter/Escape behaves intuitively.
+                    Attribute selection normalizes to a dot notation path.  Eg : toppings > cheese  is <code>toppings.cheese</code> in the computed
+                    template.
+                    <br/><br/>
+                    To use, attach it to a target div
+                    <pre>
+    $('.someclass').templar(
+        {
+            tags: {
+                'top level' : [
+                    'sub selection 1',
+                    'sub selection ..',
+                    'sub selection (n)',
+                ]
+            }
+        }
+    );
+                    </pre>
+                    <br/>
+                    To extract the computed template :
+                    <pre>
+    // compute the template
+    example.templar('computeTemplate');
+    // retrieve it
+    alert(example.attr('data-template'));
+                    </pre>
+
+
+                    <hr/>
+                    <div>
+                        <h4>Config</h4>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>name</th>
+                                    <th>description</th>
+                                    <th>example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>tags</td>
+                                    <td>
+                                        hierarchical data, depth 2 only for now
+                                        <br/><br/>
+                                        no default
+                                    </td>
+                                    <td>
+                                        <pre>
+    tags : {
+        'toppings' : [
+            'cheese',
+            'tomatoes',
+            'mozzarella',
+            'mushrooms',
+            'pepperoni',
+            'onions'
+        ],
+        'base' : [
+            'thin',
+            'pie',
+            'superthick'
+        ]
+    }
+                                        </pre>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>template</td>
+                                    <td>
+                                        Template pattern, Pattern must contain 'value' string literal.<br/><br/>
+                                        default 'value'.
+                                    </td>
+                                    <td>
+                                        <code>template : '[%value%]'</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>data</td>
+                                    <td>Initial Template data<br/><br/>
+                                    </td>
+                                    <td>
+                                        <code>data : 'Hello [%name%]!'</code>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>keyEvent</td>
+                                    <td>Delimiter key event callback, event as first argument.<br/><br/>
+                                        Default (press '[' )
+                                        <code>
+                                            keyEvent : function(ev) {
+                                            return ev.keyCode === 219;
+                                            }</code>
+                                    </td>
+                                    <td>
+                                        <pre>
+    keyEvent : function(ev) {
+        return ev.shiftKey && ev.keyCode === 220;
+    }</pre>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>character</td>
+                                    <td>Character helper, hacks out previous delmiter after variable selection<br/><br/>
+                                        default '['
+                                    </td>
+                                    <td>
+                                        <code>character : '['</code>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr/>
+                    <p class="lead">
+                        Never Asked Questions :
+                        <ul>
+                            <li><strong>Does this support text areas?</strong> Nope</li>
+                            <li><strong>How can I help?</strong>
+                                <br/>- Help me support
+                                <ul>
+                                    <li>Text Areas</li>
+                                    <li>Max input lengths</li>
+                                    <li>Template compute event callback</li>
+                                    <li>Ranging selections across text+tags</li>
+                                </ul>
+                                - Find weird use cases to make this thing better
+                            </li>
+                        </ul>
+                    </p>
                 </div>
             </div>
         </div>
 
-        <!-- script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>        
+        <!-- script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="http://twitter.github.io/bootstrap/assets/js/bootstrap-dropdown.js"></script -->
 
-        <script src="jquery.min.js"></script>        
+        <script src="jquery.min.js"></script>
         <script src="bootstrap-dropdown.js"></script>
-        
+
         <script src="js/bootstrap-templar.js"></script>
-        
-        
+
         <script type="text/javascript">
             $(document).ready(function() {
-                
-                (function($){
-
-    $.fn.autoGrowInput = function(o) {
-
-        o = $.extend({
-            maxWidth: 1000,
-            minWidth: 0,
-            comfortZone: 0
-        }, o);
-
-        this.filter('input:text').each(function(){
-
-            var minWidth = o.minWidth || $(this).width(),
-                val = '',
-                input = $(this),
-                testSubject = $('<tester/>').css({
-                    position: 'absolute',
-                    top: -9999,
-                    left: -9999,
-                    width: 'auto',
-                    fontSize: input.css('fontSize'),
-                    fontFamily: input.css('fontFamily'),
-                    fontWeight: input.css('fontWeight'),
-                    letterSpacing: input.css('letterSpacing'),
-                    whiteSpace: 'nowrap'
-                }),
-                check = function() {
-
-                    if (val === (val = input.val())) {return;}
-
-                    // Enter new content into testSubject
-                    var escaped = val.replace(/&/g, '&amp;').replace(/\s/g,'&nbsp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                    testSubject.html(escaped);
-
-                    // Calculate new width + whether to change
-                    var testerWidth = testSubject.width(),
-                        newWidth = (testerWidth + o.comfortZone) >= minWidth ? testerWidth + o.comfortZone : minWidth,
-                        currentWidth = input.width(),
-                        isValidWidthChange = (newWidth < currentWidth && newWidth >= minWidth)
-                                             || (newWidth > minWidth && newWidth < o.maxWidth);
-
-                    // Animate width
-                    if (isValidWidthChange) {
-                        input.width(newWidth);
-                    }
-
-                };
-
-            testSubject.insertAfter(input);
-
-            $(this).bind('keyup keydown blur update', check);
-
-        });
-
-        return this;
-
-    };
-
-})(jQuery);
-                
-                var hierarchyData = {
+                var tagData = {
                     'toppings' : [
                         'cheese',
                         'tomatoes',
@@ -153,14 +198,29 @@
                         'pepperoni',
                         'onions'
                     ],
+                    'mood' : [
+                        'fat',
+                        'sassy'
+                    ],
                     'base' : [
                         'thin',
                         'pie',
                         'superthick'
-                    ]
+                    ],
+
                 }
 
-                $(".templar").templar({tags: hierarchyData});
+                var example = $('.templar-example');
+                example.templar(
+                {
+                    tags: tagData,
+                    template : '[%value%]',
+                    data : "I'm feeling [%mood.fat%]'n [%mood.sassy%] gimme a [%toppings.cheese%][%toppings.cheese%] and [%toppings.tomatoes%] pizza on [%base.thin%] please!"
+                }
+            );
+
+                example.templar('computeTemplate');
+                $('#template-example-computed').html(example.attr('data-template'));
             });
         </script>
     </body>
