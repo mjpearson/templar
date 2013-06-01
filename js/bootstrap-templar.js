@@ -317,7 +317,6 @@
             // left
             } else if (ev.keyCode == 37) {
 
-                //if (src[0].localName == 'div') {
                 // keyed via dropdown
                 if (dropdown) {
                     src.prevAll('input:first').focus();
@@ -332,9 +331,19 @@
                 
             // right
             } else if (ev.keyCode == 39) {
-                if (this._lastCursorPos == src.templarCursorPosGet()) {
-                    src.nextAll('div.btn-group:first').find('button').focus();
+                // keyed via dropdown
+                if (dropdown) {
+                    src.nextAll('input:first').focus();
+                    // close
+                    src.dropdown('clearMenus');
+                } else {
+                    // edge
+                    if (this._lastCursorPos == src.templarCursorPosGet()) {
+                        src.nextAll('div.btn-group:first').find('button').focus();
+                    }
                 }
+                
+
             } else {
                 this._emit();
             }
@@ -423,7 +432,7 @@
                 self.inputKeyup(ev, true);
             });
 
-            $('.input-search', activeTag).focus();
+            activeTag.find('button').focus();
 
             return {
                 tag : activeTag,
