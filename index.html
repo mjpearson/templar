@@ -1,83 +1,298 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+        <link href="bootstrap.css" rel="stylesheet">
+        <link href="css/bootstrap.templar.css" rel="stylesheet">
 
-    <title>Bootstrap-templar by mjpearson</title>
-  </head>
 
-  <body>
-    <header>
-      <div class="inner">
-        <h1>Bootstrap-templar</h1>
-        <h2>Inline tagged templating and template compliation for text inputs with twitter bootstrap dropdowns</h2>
-        <a href="https://github.com/mjpearson/bootstrap-templar" class="button"><small>View project on</small>GitHub</a>
-      </div>
-    </header>
+        <!--[if lt IE 9]>
+        <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <title>bootstrap-templar by mjpearson</title>
+    </head>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+    <body>
+        <header>
+            <div class="inner">
+                <h2>Bootstrap-Templar</h2>
+                <h3>
+                    Tagged templating and compliation
+                </h3>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+                <a href="https://github.com/mjpearson/bootstrap-templar" class="button"><small>View project on</small>GitHub</a>
+            </div>
+        </header>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+        <div id="content-wrapper">
+            <div class="inner clearfix">
+                <section id="main-content">
+                    <div class="row">
+                        <div class="span9">
+                            <h3>
+                                <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>About</h3>
+                            <p>
+                                Inline tagged templating and template compliation from text inputs and hierarchical data,
+                                requires <a href="http://api.jquery.com/">jQuery</a>,
+                                <a href="http://twitter.github.io/bootstrap/index.html">Twitter Bootstrap</a>
+                                with <a href="http://twitter.github.io/bootstrap/javascript.html#dropdowns">Dropdowns</a> plugin.
+                                Inspired by <a href="https://github.com/willywos/bangbang">BangBang</a><br/><br/>
+                                Supports template (de)normalization, custom template format
+                            </p>
+                        </div>    
+                        <div class="span2">
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+                        </div>    
+                    </div>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+                    <div class="span12">
+                        <h3>Try it </h3>
+                        <p>
+                            just start typing, '[' opens the tag menu where you want the tag to appear.
+                        <div class=" templar-example"></div>
+                        </p>
+                        <h3>Generates</h3>
+                        <pre id="template-example-computed"></pre>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+                        <h3>How it works</h3>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+                        Templar interpolates a bootstrap-dropdown into your text for easy template variable selection, invoked with
+                        a keypress. Once invoked, it focuses on a search input so search away.  Up/Down/Enter/Escape behaves intuitively.
+                        Attribute selection normalizes to a dot notation path or config controlled delimiter.  Eg : toppings > cheese  is <code>toppings.cheese</code> in the computed
+                        template.
+                        <br/><br/>
+                        To use, attach it to a target div
+                        <pre>
+<code>
+    $('.someclass').templar(
+        {
+            tags: {
+                'top level' : [
+                    'sub selection 1',
+                    'sub selection ..',
+                    'sub selection (n)',
+                ]
+            }
+        }
+    );</code>
+                        </pre>
+                        <br/>
+                        To extract the computed template :
+                        <pre>
+    // compute the template
+    example.templar('computeTemplate');
+    // retrieve it
+    alert(example.attr('data-template'));
+                        </pre>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+                        <br/>
+                        or hook the event
+                        <pre>
+example.on('templar-template', function(ev) {
+    console.log('template is now ' + $(this).attr('data-template));
+});    
+                        </pre>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+                        <div>
+                            <h4>Config</h4>
+                            Several config options are available for basic behavioral and template (de)normalizing customizations.
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>name</th>
+                                        <th>description</th>
+                                        <th>example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>tags</td>
+                                        <td>
+                                            hierarchical data, up to depth 2 only for now
+                                            <br/><br/>
+                                            no default
+                                        </td>
+                                        <td>
+                                            <pre>
+    tags : {
+        'toppings' : [
+            'cheese',
+            'tomatoes',
+            'mozzarella',
+            'mushrooms',
+            'pepperoni',
+            'onions'
+        ],
+        'base' : [
+            'thin',
+            'pie',
+            'superthick'
+        ]
+    }
+                                            </pre>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>template</td>
+                                        <td>
+                                            Template pattern string literal<br/><br/>
+                                            default 'value'.
+                                        </td>
+                                        <td>
+                                            <code>template : '[%value%]'</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>templateKey</td>
+                                        <td>
+                                            Template key literal.  Value is interpolated into key literal.<br/><br/>
+                                            default 'value'.
+                                        </td>
+                                        <td>
+                                            <code>templateKey : 'value'</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>delimiter</td>
+                                        <td>Path Hierarchy Delimiter<br/><br/>
+                                            default '.'
+                                        </td>
+                                        <td>
+                                            <code>delimiter : '#'</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>data</td>
+                                        <td>Initial Template data<br/><br/>
+                                        </td>
+                                        <td>
+                                            <code>data : 'Hello [%name%]!'</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>keyEvent</td>
+                                        <td>Delimiter key event callback, event as first argument.<br/><br/>
+                                            default: '['
+                                            <code>
+                                                keyEvent : function(ev) {
+                                                return ev.keyCode === 219;
+                                                }</code>
+                                        </td>
+                                        <td>
+                                            <pre>
+    keyEvent : function(ev) {
+        return ev.shiftKey && ev.keyCode === 220;
+    }</pre>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>character</td>
+                                        <td>Character helper, hacks out previous delmiter after variable selection<br/><br/>
+                                            default '['
+                                        </td>
+                                        <td>
+                                            <code>character : '['</code>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <h4>Never Asked Questions</h4>
+                        
+                        <ul>
+                            <li><strong>Does this support text areas?</strong> Nope</li>
+                            <li><strong>How can I help?</strong>
+                                <br/>- Help me support
+                                <ul>
+                                    <li>Text Areas</li>
+                                    <li>Max input lengths</li>
+                                    <li>Template compute event callback</li>
+                                    <li>Ranging selections across text+tags</li>
+                                    <li>More intuitive keyboard navigation</li>
+                                </ul>
+                                and
+                                <ul>
+                                    <li>Find edge cases where this thing breaks down</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        
+                        <div class="row">
+                            <h1 style="float: right;">Thanks! <small>- <a href="http://github.com/mjpearson">mjp</a></small></h1>
+                        </div>
+                    </div>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-        </section>
+                    
+                    
+                </section>
 
-        <aside id="sidebar">
-          <a href="https://github.com/mjpearson/bootstrap-templar/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/mjpearson/bootstrap-templar/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+                <aside id="sidebar">
+                    <a href="https://github.com/mjpearson/bootstrap-templar/zipball/master" class="button">
+                        <small>Download</small>
+                        .zip file
+                    </a>
+                    <a href="https://github.com/mjpearson/bootstrap-templar/tarball/master" class="button">
+                        <small>Download</small>
+                        .tar.gz file
+                    </a>
+                </aside>
+            </div>
+        </div>
 
-          <p class="repo-owner"><a href="https://github.com/mjpearson/bootstrap-templar"></a> is maintained by <a href="https://github.com/mjpearson">mjpearson</a>.</p>
 
-          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
+        <script src="jquery.min.js"></script>
+        <script src="bootstrap-dropdown.js"></script>
 
-  
-  </body>
+        <script src="js/bootstrap-templar.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var tagData = {
+                    'toppings' : [
+                        'cheese',
+                        'tomatoes',
+                        'mozzarella',
+                        'mushrooms',
+                        'pepperoni',
+                        'onions'
+                    ],
+                    'mood' : [
+                        'fat',
+                        'sassy'
+                    ],
+                    'base' : [
+                        'thin',
+                        'pie',
+                        'superthick'
+                    ]
+                }
+
+                var example = $('.templar-example');
+                example.on('templar-template', function(ev) { 
+                    $('#template-example-computed').html($(this).attr('data-template'));
+                });
+                
+                example.templar(
+                {
+                    tags: tagData,
+                    template : '[%value%]',
+                    data : "I'm feeling [%mood.fat%]'n [%mood.sassy%] gimme a [%toppings.cheese%][%toppings.cheese%] and [%toppings.tomatoes%] pizza on [%base.thin%] please!"
+                }
+            );
+
+                
+            });
+        </script>
+
+    </body>
 </html>
