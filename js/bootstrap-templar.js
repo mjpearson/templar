@@ -303,6 +303,8 @@
                     this._removeTag(next);
                 }
                 
+                f1rnirk3nVN
+                
             // end
             } else if (ev.keyCode == 35 && !ev.shiftKey) {
                 src.nextAll('input:last').focus();
@@ -315,7 +317,6 @@
             // left
             } else if (ev.keyCode == 37) {
 
-                //if (src[0].localName == 'div') {
                 // keyed via dropdown
                 if (dropdown) {
                     src.prevAll('input:first').focus();
@@ -330,9 +331,19 @@
                 
             // right
             } else if (ev.keyCode == 39) {
-                if (this._lastCursorPos == src.templarCursorPosGet()) {
-                    src.nextAll('div.btn-group:first').find('button').focus();
+                // keyed via dropdown
+                if (dropdown) {
+                    src.nextAll('input:first').focus();
+                    // close
+                    src.dropdown('clearMenus');
+                } else {
+                    // edge
+                    if (this._lastCursorPos == src.templarCursorPosGet()) {
+                        src.nextAll('div.btn-group:first').find('button').focus();
+                    }
                 }
+                
+
             } else {
                 this._emit();
             }
@@ -421,7 +432,7 @@
                 self.inputKeyup(ev, true);
             });
 
-            $('.input-search', activeTag).focus();
+            activeTag.find('button').focus();
 
             return {
                 tag : activeTag,
@@ -458,13 +469,13 @@
             opts = this.options
 
             tagHtml += '<div class="btn-group ' + (initValue ? '' : 'open') + '">';
-            tagHtml += '    <button class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown">';
+            tagHtml += '    <button class="btn btn-small btn-inverse dropdown-toggle" data-toggle="dropdown">';
             tagHtml += '        <span data-selected-tag="' + (initValue || '') + '" class="templar-select-label">' + (initValue ? initValue.split(opts.delimiter)[1] : 'Select' ) + '</span>';
             tagHtml += '        <span class="caret"></span>';
             tagHtml += '    </button>';
             tagHtml += '    <ul class="dropdown-menu" role="menu">';
-            tagHtml += '        <li><div class="input-prepend" style="padding:3px;"><span class="add-on"><i class="icon-search"></i></span><input class="input-search" type="search" placeholder="Search"></div></li>';
-            tagHtml += '        <li class="divider"></li>';
+            //tagHtml += '        <li><div class="input-prepend" style="padding:3px;"><span class="add-on"><i class="icon-search"></i></span><input class="input-search" type="search" placeholder="Search"></div></li>';
+            //tagHtml += '        <li class="divider"></li>';
 
             for (var key in opts.tags) {
                 if (this._isArray(opts.tags[key])) {
