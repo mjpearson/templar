@@ -14,7 +14,7 @@
     "use strict"; // jshint ;_;
 
     /*
-     * TEMPALR PUBLIC CLASS DEFINITION
+     * TEMPLAR PUBLIC CLASS DEFINITION
      */
     var Templar = function (element, options) {
         this.$element = $(element);
@@ -33,7 +33,6 @@
         }, o);
 
         this.filter('input:text').each(function(){
-
             var minWidth = o.minWidth || $(this).width(),
             val = '',
             input = $(this),
@@ -49,7 +48,7 @@
                 whiteSpace: 'nowrap'
             }),
             check = function(ev) {
-                if (val === (val = input.val())) {
+                if (ev.type != 'templar-force-scale' && val === (val = input.val())) {
                     return;
                 }
 
@@ -72,8 +71,7 @@
 
             testSubject.insertAfter(input);
 
-            $(this).bind('keyup keydown blur update', check);
-
+            $(this).bind('keyup keydown blur update templar-force-scale', check);
         });
 
         return this;
@@ -112,15 +110,47 @@
     Templar.prototype = {
         constructor: Templar,
 
+        _templateKey : null,
+
+        _getType : function(typeFor) {
+            return Object.prototype.toString.call(typeFor);
+        },
+
+        _isArray : function(what) {
+            return (this._getType(what)  == '[object Array]');
+        },
+
+        _sortSlice : function(a, b) {
+            if (a.start > b.start) {
+                return 1;
+            } else if (a.start < b.start) {
+                return -1;
+            } else if (a.start == b.start) {
+                return 0;
+            }
+        },
+
+        // setup
         listen: function () {
+            if (!this.$element.hasClass('templar')) {
+                this.$element.addClass('templar');
+            }
+
+            // precompile the template key
+            this._templateKey = new RegExp(this.options.templateKey);
+
+            // Add a preliminary input field
+            var txt = this._addInput();
+
             // tokenize and build from existing template
             if (this.options.data) {
                 var tplStr, tokens, match, d = this.options.data, slices = [], idx, pos = 0,
                 tagValue;
+
                 for (var key in this.options.tags) {
                     for (var i = 0; i < this.options.tags[key].length; i++) {
-                        tagValue = key + '.' + this.options.tags[key][i];
-                        tplStr = this.options.template.replace(/value/, tagValue);
+                        tagValue = key + this.options.delimiter + this.options.tags[key][i];
+                        tplStr = this.options.template.replace(this._templateKey, tagValue);
                         var startIndex = 0, searchStrLen = tplStr.length;
                         var index;
 
@@ -138,17 +168,10 @@
                     }
                 }
 
-                // find remaining intervals, this must be text
-                slices = slices.sort(function(a, b) {
-                    if (a.start > b.start) {
-                        return 1;
-                    } else if (a.start < b.start) {
-                        return -1;
-                    } else if (a.start == b.start) {
-                        return 0;
-                    }
-                });
+                // enforce natural token ordering
+                slices = slices.sort(this._sortSlice);
 
+                // find remaining intervals, this must be text
                 var newSlices = [];
                 var start = 0, slice;
                 i = 0;
@@ -181,28 +204,25 @@
                     i++;
                 }
 
-                newSlices.sort(function(a, b) {
-                    if (a.start > b.start) {
-                        return 1;
-                    } else if (a.start < b.start) {
-                        return -1;
-                    } else if (a.start == b.start) {
-                        return 0;
-                    }
-                });
-console.log(newSlices);
-                var last = null
+                // enforce natural token ordering
+                newSlices.sort(this._sortSlice);
+
+                // iterate over slice chain and create denormalized representation
+                var last = txt, lastTxt = last, lastTag,
+                    lastInput = this.$element;
+
                 for (var i = 0; i < newSlices.length; i++) {
                     if (newSlices[i].tag) {
-                        last = this._addTag(last, newSlices[i].actualValue)                        
+                        last = this._addTag(last, newSlices[i].actualValue);
+                        lastTag = last.tag;
+                        lastTxt = last.txt;
                     } else {
-                        last = this._addInput(last, newSlices[i].value);
-                        last.templarCursorPosSet(newSlices[i].value.length);
-                    }                    
+                        lastTxt.val(newSlices[i].value);
+                        lastTxt.templarCursorPosSet(newSlices[i].value.length);
+                    }
+
+                    last = lastTxt;
                 }
-            } else {
-                // Add a preliminary input field
-                this._addInput();
             }
 
             if (this.eventSupported('keydown')) {
@@ -219,6 +239,11 @@ console.log(newSlices);
             return isSupported
         },
 
+        _emit : function() {
+            this.computeTemplate();
+            this.$element.trigger('templar-template');
+        },
+
         computeTemplate : function() {
             var computedData = '',
             tplData = '',
@@ -231,7 +256,10 @@ console.log(newSlices);
                 } else {
                     tplData = $(el).find('span.templar-select-label').attr('data-selected-tag');
                     if (tplData) {
-                        computedData += self.options.template.replace(/value/, tplData)
+                        computedData += self.options.template.replace(
+                            self._templateKey,
+                            tplData
+                        );
                     }
                 }
             });
@@ -240,20 +268,22 @@ console.log(newSlices);
             return computedData;
         },
 
-        _lastFocusLength : 0,
-
         /**
-         *
+         * key event
          */
-        inputKeyup : function(ev) {
-            var src = $(ev.currentTarget), prev;
+        _lastFocusLength : 0,
+        _lastCursorPos : 0,
+
+        inputKeyup : function(ev, dropdown) {
+            var src = $(ev.currentTarget), prev, next;
+            dropdown = dropdown || false;
 
             if (this.options.keyEvent(ev)) {
                 this._addTag(src);
 
             // backspace
             } else if (ev.keyCode == 8) {
-                // we don't want to drop the tag when lenght 0,
+                // we don't want to drop the tag when length 0,
                 // just when they hit backspace twice on a button group edge
                 this._lastFocusLength--;
                 if ((src.templarCursorPosGet() == 0 && src.val() != '') ||
@@ -263,22 +293,57 @@ console.log(newSlices);
                     prev = src.prevAll('div.btn-group:first');
                     this._removeTag(prev);
                 }
+                this._emit();
 
+            // delete
+            } else if (ev.keyCode == 46) {
+                // delete on an input edge is a special case
+                if (src.templarCursorPosGet() == src.val().length && this._lastFocusLength > 0) {
+                    next = src.nextAll('div.btn-group:first');
+                    this._removeTag(next);
+                }
+                
             // end
-            } else if (ev.keyCode == 35) {
+            } else if (ev.keyCode == 35 && !ev.shiftKey) {
                 src.nextAll('input:last').focus();
                 src.templarCursorPosSet(src.val().length);
             // home
-            } else if (ev.keyCode == 36) {
+            } else if (ev.keyCode == 36 && !ev.shiftKey) {
                 src.prevAll('input:last').focus();
                 src.templarCursorPosSet(0);
+                
+            // left
+            } else if (ev.keyCode == 37) {
+
+                //if (src[0].localName == 'div') {
+                // keyed via dropdown
+                if (dropdown) {
+                    src.prevAll('input:first').focus();
+                    // close
+                    src.dropdown('clearMenus');
+                } else {
+                    // edge
+                    if (this._lastCursorPos == src.templarCursorPosGet()) {
+                        src.prevAll('div.btn-group:first').find('button').focus();
+                    }    
+                }
+                
+            // right
+            } else if (ev.keyCode == 39) {
+                if (this._lastCursorPos == src.templarCursorPosGet()) {
+                    src.nextAll('div.btn-group:first').find('button').focus();
+                }
+            } else {
+                this._emit();
             }
 
+            this._lastCursorPos = src.templarCursorPosGet();
             this._lastFocusLength = src.val().length;
         },
 
         _addInput : function(after, initValue) {
             var html = $('<input type="text" autocomplete="off" value="' + (initValue || '') + '" />');
+
             if (after) {
                 after.after(html);
             } else {
@@ -292,43 +357,32 @@ console.log(newSlices);
             });
 
             html.on('focus',    $.proxy(this.focus, this)).
-            on('blur',     $.proxy(this.blur, this)).
-            on('keypress', $.proxy(this.keypress, this)).
-            on('keyup',    $.proxy(this.inputKeyup, this));
+                on('blur',     $.proxy(this.blur, this)).
+                on('keypress', $.proxy(this.keypress, this)).
+                on('keyup',    $.proxy(this.inputKeyup, this));
 
+            this._emit();
             return html;
         },
 
-        _activeTag : null,
-
         _addTag : function(after, initValue) {
-            var self = this, el, prev, next, pos, initVal;
-
-            if (!initValue && null !== this._activeTag) {
-//                this._removeTag(this._activeTag);
-                this._activeTag = null;
-                return;
-            }
+            var self = this, el, prev, next, pos, initVal, lastTxt, nextInput;
 
             var activeTag = $(this._addTagHtml(initValue));
 
-            if (after) {
-                // if cursor position != length of input, then splice the input
-                pos = after.templarCursorPosGet();
-                if (pos != after.val().length) {
-                    initVal = after.val().substring(pos, after.val().length);
-                    after.val(after.val().substring(0, pos - 1));
-                }
-                el = after.after(this._activeTag);
-            } else {
-                el = this.$element.append(this._activeTag);
+            // if cursor position != length of input, then splice the input
+            pos = after.templarCursorPosGet();
+            if (pos != after.val().length) {
+                initVal = after.val().substring(pos, after.val().length);
+                after.val(after.val().substring(0, pos - 1));
             }
+            el = after.after(activeTag);
 
             this._tagOpen = true;
 
-            if (!initValue) {
-                self._addInput(this._activeTag, initVal);
-            }
+            // add an input after this tag
+            nextInput = self._addInput(activeTag, initVal);
+            nextInput.trigger('templar-force-scale');
 
             next = activeTag.next();
             prev = activeTag.prev();
@@ -356,17 +410,23 @@ console.log(newSlices);
                     val = val.replace(new RegExp('\\' + self.options.character + '$'), '');
                     $(this).prev().val(val);
 
-                    //el.nextAll('input:first').focus();
                     src.nextAll('input:first').focus();
+                    self._emit();
                 }
 
                 self._activeTag = null;
             });
 
+            activeTag.on('keydown.dropdown.data-api', function(ev) {
+                self.inputKeyup(ev, true);
+            });
+
             $('.input-search', activeTag).focus();
-            
-            this._activeTag = activeTag;
-            return activeTag;
+
+            return {
+                tag : activeTag,
+                txt : nextInput
+            }
         },
 
         /**
@@ -374,7 +434,7 @@ console.log(newSlices);
          */
         _removeTag : function(el) {
             var prev = el.prevAll('input:first'),
-            next = el.nextAll('input:first'),           
+            next = el.nextAll('input:first'),
             prevLen = prev.val().length;
 
             el.remove();
@@ -389,6 +449,7 @@ console.log(newSlices);
                 prev.templarCursorPosSet(prevLen);
 
                 this._lastFocusLength = prev.val().length;
+                this._emit();
             }
         },
 
@@ -398,7 +459,7 @@ console.log(newSlices);
 
             tagHtml += '<div class="btn-group ' + (initValue ? '' : 'open') + '">';
             tagHtml += '    <button class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown">';
-            tagHtml += '        <span data-selected-tag="' + (initValue || '') + '" class="templar-select-label">' + (initValue ? initValue.split('.')[1] : 'Select' ) + '</span>';
+            tagHtml += '        <span data-selected-tag="' + (initValue || '') + '" class="templar-select-label">' + (initValue ? initValue.split(opts.delimiter)[1] : 'Select' ) + '</span>';
             tagHtml += '        <span class="caret"></span>';
             tagHtml += '    </button>';
             tagHtml += '    <ul class="dropdown-menu" role="menu">';
@@ -406,9 +467,13 @@ console.log(newSlices);
             tagHtml += '        <li class="divider"></li>';
 
             for (var key in opts.tags) {
-                tagHtml += '            <li>' + key + '</li>';
-                for (var i = 0; i < opts.tags[key].length; i++) {
-                    tagHtml += '                <li><a data-tag="' + key + '.' + opts.tags[key][i] + '" href=""><i class="icon-chevron-right"></i> ' + opts.tags[key][i] + '</a></li>';
+                if (this._isArray(opts.tags[key])) {
+                    tagHtml += '            <li>' + key + '</li>';
+                    for (var i = 0; i < opts.tags[key].length; i++) {
+                        tagHtml += '                <li><a data-tag="' + key + opts.delimiter + opts.tags[key][i] + '" href=""><i class="icon-chevron-right"></i> ' + opts.tags[key][i] + '</a></li>';
+                    }
+                } else {
+                    tagHtml += '                <li><a data-tag="' + opts.tags[key] + '" href=""><i class="icon-chevron-right"></i> ' + opts.tags[key] + '</a></li>';
                 }
             }
 
@@ -420,9 +485,9 @@ console.log(newSlices);
     }
 
     /*
-     * TEMPALR PLUGIN DEFINITION
+     * TEMPLAR PLUGIN DEFINITION
      */
-    var old = $.fn.typeahead
+    var old = $.fn.templar
 
     $.fn.templar = function (option) {
         return this.each(function () {
@@ -436,9 +501,12 @@ console.log(newSlices);
         });
     }
 
+    // setup defaults
     $.fn.templar.defaults = {
         tags: [],
-        template : 'value',
+        templateKey : 'value',
+        template : '',
+        delimiter : '.',
         // delimiter key event, default "["
         character : '[',
         keyEvent : function(ev) {
@@ -446,10 +514,12 @@ console.log(newSlices);
         }
     }
 
+    $.fn.templar.defaults.template = $.fn.templar.defaults.templateKey;
+
     $.fn.templar.Constructor = Templar
 
     /*
-     * TEMPALR NO CONFLICT
+     * TEMPLAR NO CONFLICT
      */
     $.fn.templar.noConflict = function () {
         $.fn.templar = old
