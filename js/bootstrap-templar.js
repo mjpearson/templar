@@ -303,12 +303,11 @@
                     this._removeTag(next);
                 }
                 
-                f1rnirk3nVN
-                
             // end
             } else if (ev.keyCode == 35 && !ev.shiftKey) {
                 src.nextAll('input:last').focus();
                 src.templarCursorPosSet(src.val().length);
+
             // home
             } else if (ev.keyCode == 36 && !ev.shiftKey) {
                 src.prevAll('input:last').focus();
@@ -321,11 +320,11 @@
                 if (dropdown) {
                     src.prevAll('input:first').focus();
                     // close
-                    src.dropdown('clearMenus');
+                    src.dropdown('toggle');
                 } else {
                     // edge
                     if (this._lastCursorPos == src.templarCursorPosGet()) {
-                        src.prevAll('div.btn-group:first').find('button').focus();
+                        src.prevAll('div.btn-group:first').find('button').focus().dropdown('toggle');
                     }    
                 }
                 
@@ -333,13 +332,17 @@
             } else if (ev.keyCode == 39) {
                 // keyed via dropdown
                 if (dropdown) {
-                    src.nextAll('input:first').focus();
+                    src.nextAll('input:first').focus().templarCursorPosSet(0);
+                    
                     // close
-                    src.dropdown('clearMenus');
+                    src.dropdown('toggle');
                 } else {
                     // edge
                     if (this._lastCursorPos == src.templarCursorPosGet()) {
-                        src.nextAll('div.btn-group:first').find('button').focus();
+                        src.nextAll('div.btn-group:first').
+                            find('button').
+                            focus().
+                            dropdown('toggle');
                     }
                 }
                 
