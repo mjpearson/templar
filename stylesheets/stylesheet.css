@@ -70,10 +70,10 @@ header {
     /*background: #2e7bcf url(../images/header-bg.jpg) 0 0 repeat-x;*/
     background : url(../images/header-bg.jpg) 0 0 repeat;
     background-size: cover;
-    border-bottom: solid 5px whitesmoke;
-    -webkit-box-shadow: 0px 3px 24px rgba(0, 0, 0, 0.15);
-    -moz-box-shadow: 0px 3px 24px rgba(0, 0, 0, 0.15);
-    box-shadow: 0px 3px 24px rgba(0, 0, 0, 0.15);
+    border: solid 5px whitesmoke;
+    -webkit-box-shadow: 0px 3px 24px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 0px 3px 24px rgba(0, 0, 0, 0.35);
+    box-shadow: 0px 3px 24px rgba(0, 0, 0, 0.35);
     border-bottom-left-radius: 100px;
     border-top-right-radius: 100px;
 }
