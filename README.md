@@ -16,5 +16,5 @@ Include ./js/bootstrap-templar.min.js and ./css/bootstrap-templar.css into your 
 MIT http://opensource.org/licenses/MIT
 
 
-- thanks! [Michael Pearson](mailto://npm@m.bip.io)
+- thanks! [Michael Pearson](mailto:npm@m.bip.io)
 
