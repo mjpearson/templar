@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+
         <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
@@ -48,10 +49,10 @@
                                 Supports template (de)normalization, custom template format.  Use it to build Underscore/Jade/Angularjs templates dynamically or whatever else
                                 you can think of.
                             </p>
-                        </div>    
+                        </div>
                         <div class="span2">
 
-                        </div>    
+                        </div>
                     </div>
 
 
@@ -77,11 +78,13 @@
     $('.someclass').templar(
         {
             tags: {
-                'top level' : [
-                    'sub selection 1',
-                    'sub selection ..',
-                    'sub selection (n)',
-                ]
+                'toplevel' : 
+                    label : 'Top Level Label',
+                    data : [
+                        'sub selection 1',
+                        'sub selection ..',
+                        'sub selection (n)',
+                    ]
             }
         }
     );</code>
@@ -100,7 +103,7 @@
                         <pre>
 example.on('templar-template', function(ev) {
     console.log('template is now ' + $(this).attr('data-template));
-});    
+});
                         </pre>
 
                         <div>
@@ -125,19 +128,36 @@ example.on('templar-template', function(ev) {
                                         <td>
                                             <pre>
     tags : {
-        'toppings' : [
-            'cheese',
-            'tomatoes',
-            'mozzarella',
-            'mushrooms',
-            'pepperoni',
-            'onions'
-        ],
-        'base' : [
-            'thin',
-            'pie',
-            'superthick'
-        ]
+        'toppings' : {
+            'label' : 'Toppings',
+            'data' : [
+                {
+                    label : "Cheezzzze",
+                    value : 'cheezz'
+                },
+                'cheese',
+                'tomatoes',
+                'mozzarella',
+                'mushrooms',
+                'pepperoni',
+                'onions'
+                ]
+            },
+            'mood' : {
+                label : 'Mood',
+                data : [
+                    'fat',
+                    'sassy' 
+                ]
+            },
+            'base' : {
+                label : 'Base',
+                data : [
+                    'thin',
+                    'pie',
+                    'superthick'
+                ]
+            }
     }
                                             </pre>
                                         </td>
@@ -207,9 +227,9 @@ example.on('templar-template', function(ev) {
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <h4>Never Asked Questions</h4>
-                        
+
                         <ul>
                             <li><strong>Does this support text areas?</strong> Nope</li>
                             <li><strong>How can I help?</strong>
@@ -227,14 +247,14 @@ example.on('templar-template', function(ev) {
                                 </ul>
                             </li>
                         </ul>
-                        
+
                         <div class="row">
                             <h1 style="float: right;">Thanks! <small>- <a href="http://github.com/mjpearson">mjp</a></small></h1>
                         </div>
                     </div>
 
-                    
-                    
+
+
                 </section>
 
                 <aside id="sidebar">
@@ -254,44 +274,57 @@ example.on('templar-template', function(ev) {
         <script src="jquery.min.js"></script>
         <script src="bootstrap-dropdown.js"></script>
 
-        <script src="js/bootstrap-templar.min.js"></script>
+        <script src="js/bootstrap-templar.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function() {
                 var tagData = {
-                    'toppings' : [
-                        'cheese',
-                        'tomatoes',
-                        'mozzarella',
-                        'mushrooms',
-                        'pepperoni',
-                        'onions'
-                    ],
-                    'mood' : [
-                        'fat',
-                        'sassy'
-                    ],
-                    'base' : [
-                        'thin',
-                        'pie',
-                        'superthick'
-                    ]
+                    'toppings' : {
+                        'label' : '<i class="icon-random"></i> Toppings',
+                        'data' : [
+                            {
+                                label : "Cheezzzze",
+                                value : 'cheezz'
+                            },
+                            'cheese',
+                            'tomatoes',
+                            'mozzarella',
+                            'mushrooms',
+                            'pepperoni',
+                            'onions'
+                        ]
+                    },
+                    'mood' : {
+                        label : '<i class="icon-random"></i> Mood',
+                        data : [
+                            'fat',
+                            'sassy'
+                        ]
+                    },
+                    'base' : {
+                        label : '<i class="icon-random"></i> Base',
+                        data : [
+                            'thin',
+                            'pie',
+                            'superthick'
+                        ]
+                    }
                 }
 
                 var example = $('.templar-example');
-                example.on('templar-template', function(ev) { 
+                example.on('templar-template', function(ev) {
                     $('#template-example-computed').html($(this).attr('data-template'));
                 });
-                
+
                 example.templar(
                 {
                     tags: tagData,
                     template : '[%value%]',
-                    data : "I'm feeling [%mood.fat%]'n [%mood.sassy%] gimme a [%toppings.cheese%][%toppings.cheese%] and [%toppings.tomatoes%] pizza on [%base.thin%] please!"
+                    data : "I'm feeling [%mood.fat%]'n [%mood.sassy%] gimme a [%toppings.cheezz%][%toppings.cheese%] and [%toppings.tomatoes%] pizza on [%base.thin%] please!"
                 }
             );
 
-                
+
             });
         </script>
 
