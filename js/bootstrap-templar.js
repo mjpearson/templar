@@ -116,6 +116,10 @@
             return Object.prototype.toString.call(typeFor);
         },
 
+        _isObject : function(what) {
+            return (this._getType(what)  == '[object Object]');
+        },
+
         _isArray : function(what) {
             return (this._getType(what)  == '[object Array]');
         },
@@ -148,9 +152,16 @@
                 tagValue;
 
                 for (var key in this.options.tags) {
-                    for (var i = 0; i < this.options.tags[key].length; i++) {
-                        tagValue = key + this.options.delimiter + this.options.tags[key][i];
+                    for (var i = 0; i < this.options.tags[key].data.length; i++) {
+                        tagValue = key + 
+                                    this.options.delimiter + 
+                                    (this._isObject(this.options.tags[key].data[i]) ?
+                                        this.options.tags[key].data[i].value : 
+                                        this.options.tags[key].data[i]
+                                    );
+
                         tplStr = this.options.template.replace(this._templateKey, tagValue);
+
                         var startIndex = 0, searchStrLen = tplStr.length;
                         var index;
 
@@ -302,7 +313,7 @@
                     next = src.nextAll('div.btn-group:first');
                     this._removeTag(next);
                 }
-                
+
             // end
             } else if (ev.keyCode == 35 && !ev.shiftKey) {
                 src.nextAll('input:last').focus();
@@ -312,7 +323,7 @@
             } else if (ev.keyCode == 36 && !ev.shiftKey) {
                 src.prevAll('input:last').focus();
                 src.templarCursorPosSet(0);
-                
+
             // left
             } else if (ev.keyCode == 37) {
 
@@ -325,15 +336,15 @@
                     // edge
                     if (this._lastCursorPos == src.templarCursorPosGet()) {
                         src.prevAll('div.btn-group:first').find('button').focus().dropdown('toggle');
-                    }    
+                    }
                 }
-                
+
             // right
             } else if (ev.keyCode == 39) {
                 // keyed via dropdown
                 if (dropdown) {
                     src.nextAll('input:first').focus().templarCursorPosSet(0);
-                    
+
                     // close
                     src.dropdown('toggle');
                 } else {
@@ -345,7 +356,7 @@
                             dropdown('toggle');
                     }
                 }
-                
+
 
             } else {
                 this._emit();
@@ -467,9 +478,10 @@
             }
         },
 
-        _addTagHtml : function(initValue) {
+        _addTagHtml : function(initValue, initLabel) {
             var tagHtml = '',
-            opts = this.options
+                opts = this.options,
+                label, value;
 
             tagHtml += '<div class="btn-group ' + (initValue ? '' : 'open') + '">';
             tagHtml += '    <button class="btn btn-small btn-inverse dropdown-toggle" data-toggle="dropdown">';
@@ -477,17 +489,14 @@
             tagHtml += '        <span class="caret"></span>';
             tagHtml += '    </button>';
             tagHtml += '    <ul class="dropdown-menu" role="menu">';
-            //tagHtml += '        <li><div class="input-prepend" style="padding:3px;"><span class="add-on"><i class="icon-search"></i></span><input class="input-search" type="search" placeholder="Search"></div></li>';
-            //tagHtml += '        <li class="divider"></li>';
 
             for (var key in opts.tags) {
-                if (this._isArray(opts.tags[key])) {
-                    tagHtml += '            <li>' + key + '</li>';
-                    for (var i = 0; i < opts.tags[key].length; i++) {
-                        tagHtml += '                <li><a data-tag="' + key + opts.delimiter + opts.tags[key][i] + '" href=""><i class="icon-chevron-right"></i> ' + opts.tags[key][i] + '</a></li>';
-                    }
-                } else {
-                    tagHtml += '                <li><a data-tag="' + opts.tags[key] + '" href=""><i class="icon-chevron-right"></i> ' + opts.tags[key] + '</a></li>';
+                tagHtml += '            <li>' + (opts.tags[key].label ? opts.tags[key].label : key.label) + '</li>';
+                for (var i = 0; i < opts.tags[key].data.length; i++) {
+                    label = this._isObject(opts.tags[key].data[i]) ? opts.tags[key].data[i]['label'] : opts.tags[key].data[i];
+                    value = this._isObject(opts.tags[key].data[i]) ? opts.tags[key].data[i]['value'] : opts.tags[key].data[i];
+                    debugger;
+                    tagHtml += '                <li><a data-tag="' + key + opts.delimiter + value + '" href=""><i class="icon-chevron-right"></i> ' + label + '</a></li>';
                 }
             }
 
