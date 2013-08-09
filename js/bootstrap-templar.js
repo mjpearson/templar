@@ -140,6 +140,16 @@
                 this.$element.addClass('templar');
             }
 
+            this.$element.on('click', function(ev) {                
+                var lastInput;
+
+                if (ev.target === this) {
+                    lastInput = $(this).children('input:last');
+                    // get last input
+                    lastInput.focus().templarCursorPosSet(lastInput.val().length);
+                }                
+            });
+
             // precompile the template key
             this._templateKey = new RegExp(this.options.templateKey);
 
@@ -170,6 +180,7 @@
                                 tag : true,
                                 value : tplStr,
                                 actualValue : tagValue,
+                                labelValue : this.options.tags[key].data[i].label,
                                 start : index,
                                 end : index + searchStrLen - 1
                             });
@@ -224,7 +235,7 @@
 
                 for (var i = 0; i < newSlices.length; i++) {
                     if (newSlices[i].tag) {
-                        last = this._addTag(last, newSlices[i].actualValue);
+                        last = this._addTag(last, newSlices[i].actualValue, newSlices[i].labelValue);
                         lastTag = last.tag;
                         lastTxt = last.txt;
                     } else {
@@ -364,10 +375,13 @@
 
             this._lastCursorPos = src.templarCursorPosGet();
             this._lastFocusLength = src.val().length;
+            ev.stopPropagation();
+            ev.preventDefault();
+            
         },
 
         _addInput : function(after, initValue) {
-            var html = $('<input type="text" autocomplete="off" value="' + (initValue || '') + '" />');
+            var html = $('<input type="text" width="20px" autocomplete="off" value="' + (initValue || '') + '" />');
 
             if (after) {
                 after.after(html);
@@ -386,14 +400,16 @@
                 on('keypress', $.proxy(this.keypress, this)).
                 on('keyup',    $.proxy(this.inputKeyup, this));
 
+            html.trigger('templar-force-scale');
+
             this._emit();
             return html;
         },
 
-        _addTag : function(after, initValue) {
+        _addTag : function(after, initValue, initLabel) {
             var self = this, el, prev, next, pos, initVal, lastTxt, nextInput;
 
-            var activeTag = $(this._addTagHtml(initValue));
+            var activeTag = $(this._addTagHtml(initValue, initLabel));
 
             // if cursor position != length of input, then splice the input
             pos = after.templarCursorPosGet();
@@ -460,21 +476,25 @@
         _removeTag : function(el) {
             var prev = el.prevAll('input:first'),
             next = el.nextAll('input:first'),
-            prevLen = prev.val().length;
+            prevLen;
+            
+            if (prev.val()) {
+                prevLen = prev.val().length;
 
-            el.remove();
+                el.remove();
 
-            if (prev.length === 1 && next.length === 1) {
-                var val = prev.val() + next.val();
-                prev.val(val);
-                next.remove();
+                if (prev.length === 1 && next.length === 1) {
+                    var val = prev.val() + next.val();
+                    prev.val(val);
+                    next.remove();
 
-                prev.trigger('keyup');
-                prev.focus();
-                prev.templarCursorPosSet(prevLen);
+                    prev.trigger('keyup');
+                    prev.focus();
+                    prev.templarCursorPosSet(prevLen);
 
-                this._lastFocusLength = prev.val().length;
-                this._emit();
+                    this._lastFocusLength = prev.val().length;
+                    this._emit();
+                }
             }
         },
 
@@ -482,22 +502,31 @@
             var tagHtml = '',
                 opts = this.options,
                 label, value;
+                
+            if (!initLabel) {
+                initLabel = (initValue ? initValue.split(opts.delimiter)[1] : 'Select');
+            }
 
             tagHtml += '<div class="btn-group ' + (initValue ? '' : 'open') + '">';
-            tagHtml += '    <button class="btn btn-small btn-inverse dropdown-toggle" data-toggle="dropdown">';
-            tagHtml += '        <span data-selected-tag="' + (initValue || '') + '" class="templar-select-label">' + (initValue ? initValue.split(opts.delimiter)[1] : 'Select' ) + '</span>';
-            tagHtml += '        <span class="caret"></span>';
+            tagHtml += '    <button class="btn btn-small btn-success">' + initLabel + '</button>';            
+            tagHtml += '    <button class="btn btn-small btn-success dropdown-toggle" data-toggle="dropdown">';
+            tagHtml += '        <span data-selected-tag="' + (initValue || '') + '" class="templar-select-label caret"></span>';
             tagHtml += '    </button>';
             tagHtml += '    <ul class="dropdown-menu" role="menu">';
 
             for (var key in opts.tags) {
-                tagHtml += '            <li>' + (opts.tags[key].label ? opts.tags[key].label : key.label) + '</li>';
+                tagHtml += '            <li class="dropdown-submenu title"><a tabinxex="-1" href="#"> ' + (opts.tags[key].label ? opts.tags[key].label : key.label) + '</a>';
+                
+                tagHtml += '                <ul class="dropdown-menu">';
+                
                 for (var i = 0; i < opts.tags[key].data.length; i++) {
                     label = this._isObject(opts.tags[key].data[i]) ? opts.tags[key].data[i]['label'] : opts.tags[key].data[i];
                     value = this._isObject(opts.tags[key].data[i]) ? opts.tags[key].data[i]['value'] : opts.tags[key].data[i];
-                    debugger;
                     tagHtml += '                <li><a data-tag="' + key + opts.delimiter + value + '" href=""><i class="icon-chevron-right"></i> ' + label + '</a></li>';
-                }
+                
+            }
+                tagHtml += '                </ul>';
+                tagHtml += '            </li>';
             }
 
             tagHtml += '    </ul>';
