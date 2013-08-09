@@ -276,7 +276,8 @@
                 if (el.localName == 'input') {
                     computedData += $(el).val();
                 } else {
-                    tplData = $(el).find('span.templar-select-label').attr('data-selected-tag');
+                    tplData = $(el).find('.templar-select-label').attr('data-selected-tag');
+                    debugger;
                     if (tplData) {
                         computedData += self.options.template.replace(
                             self._templateKey,
@@ -508,9 +509,9 @@
             }
 
             tagHtml += '<div class="btn-group ' + (initValue ? '' : 'open') + '">';
-            tagHtml += '    <button class="btn btn-small btn-success">' + initLabel + '</button>';            
+            tagHtml += '    <button data-selected-tag="' + (initValue || '') + '" class="btn btn-small btn-success templar-select-label">' + initLabel + '</button>';            
             tagHtml += '    <button class="btn btn-small btn-success dropdown-toggle" data-toggle="dropdown">';
-            tagHtml += '        <span data-selected-tag="' + (initValue || '') + '" class="templar-select-label caret"></span>';
+            tagHtml += '        <span class="caret"></span>';
             tagHtml += '    </button>';
             tagHtml += '    <ul class="dropdown-menu" role="menu">';
 
@@ -522,9 +523,8 @@
                 for (var i = 0; i < opts.tags[key].data.length; i++) {
                     label = this._isObject(opts.tags[key].data[i]) ? opts.tags[key].data[i]['label'] : opts.tags[key].data[i];
                     value = this._isObject(opts.tags[key].data[i]) ? opts.tags[key].data[i]['value'] : opts.tags[key].data[i];
-                    tagHtml += '                <li><a data-tag="' + key + opts.delimiter + value + '" href=""><i class="icon-chevron-right"></i> ' + label + '</a></li>';
-                
-            }
+                    tagHtml += '                <li><a data-tag="' + key + opts.delimiter + value + '" href=""><i class="icon-chevron-right"></i> ' + label + '</a></li>';                
+                }
                 tagHtml += '                </ul>';
                 tagHtml += '            </li>';
             }
