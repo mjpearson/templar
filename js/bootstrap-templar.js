@@ -429,11 +429,15 @@
             next = activeTag.next();
             prev = activeTag.prev();
 
-            activeTag.find('li a').click(function(ev) {
-                var src = $(this);
+            activeTag.find('ul.dropdown-menu li a').click(function(ev) {
+                var src = $(this),
+                    tagVal = src.attr('data-tag');
+
                 ev.preventDefault();
-                $('.templar-select-label', activeTag).html(src.text());
-                $('.templar-select-label', activeTag).attr('data-selected-tag', src.attr('data-tag'));
+                if (tagVal) {
+                    $('.templar-select-label', activeTag).html(src.text());
+                    $('.templar-select-label', activeTag).attr('data-selected-tag', tagVal);
+                }
                 self._tagOpen = false;
             });
 
