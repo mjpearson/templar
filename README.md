@@ -1,7 +1,7 @@
 templar
 =================
 
-Inline tagged templating and template compliation for text inputs with Select2
+Inline tagged templating and template compliation with Select2
 
 #### API Reference
 
