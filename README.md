@@ -1,7 +1,7 @@
 bootstrap-templar
 =================
 
-Inline tagged templating and template compliation for text inputs with Twitter Bootstrap + dropdown
+Inline tagged templating and template compliation for text inputs with Select2
 
 #### API Reference
 
