@@ -53,7 +53,7 @@
     text-transform: none;
 }
 
-.templar .bigdrop{
+.bigdrop{
     width: auto !important;
     max-width: 600px;
 }
