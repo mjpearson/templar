@@ -5,11 +5,11 @@ Inline tagged templating and template compliation for text inputs with Select2
 
 #### API Reference
 
-Via http://mjpearson.github.io/bootstrap-templar
+Via http://mjpearson.github.io/templar
 
 #### Installation
 
-Include ./js/bootstrap-templar.min.js and ./css/bootstrap-templar.css into your page.  
+Include ./js/templar.min.js and ./css/templar.css into your page.  
 
 #### Licence
 
