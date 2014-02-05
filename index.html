@@ -1,84 +1,86 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset='utf-8'>
-        <meta http-equiv="X-UA-Compatible" content="chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
 
-        <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-        <link href="bootstrap.css" rel="stylesheet">
-        <link href="css/bootstrap.templar.css" rel="stylesheet">
+    <link href="bootstrap.css" rel="stylesheet">
+    <link href="select2.css" rel="stylesheet">
+    <link href="css/bootstrap.templar.css" rel="stylesheet">
 
 
-        <!--[if lt IE 9]>
-        <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-        <title>bootstrap-templar by mjpearson</title>
-    </head>
+    <title>bootstrap-templar by mjpearson</title>
+  </head>
 
-    <body>
-        <header>
-            <div class="inner">
-                <h2>Bootstrap-Templar</h2>
-                <h3>
-                    Tagged template compilation
-                </h3>
+  <body>
+    <header>
+      <div class="inner">
+        <h2>Bootstrap-Templar</h2>
+        <h3>
+          Tagged template compilation
+        </h3>
 
-                <a href="https://github.com/mjpearson/bootstrap-templar" class="button"><small>View project on</small>GitHub</a>
+        <a href="https://github.com/mjpearson/bootstrap-templar" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <div class="row">
+            <div class="span9">
+              <h3>
+                <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>About</h3>
+              <p>
+                Inline tagged templating and template compilation from text inputs and hierarchical data,
+                requires <a href="http://api.jquery.com/">jQuery</a>
+                with <a href="http://ivaynberg.github.io/select2/">Select2</a>.<br/><br/>                
+                Supports template (de)normalization, custom template format.  Use it to build Underscore/Jade/Angularjs 
+                templates dynamically or whatever else
+                you can think of.  It's used by <a href="https://bip.io">bipio</a>
+              </p>
             </div>
-        </header>
+            <div class="span2">
 
-        <div id="content-wrapper">
-            <div class="inner clearfix">
-                <section id="main-content">
-                    <div class="row">
-                        <div class="span9">
-                            <h3>
-                                <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>About</h3>
-                            <p>
-                                Inline tagged templating and template compilation from text inputs and hierarchical data,
-                                requires <a href="http://api.jquery.com/">jQuery</a>,
-                                <a href="http://twitter.github.io/bootstrap/index.html">Twitter Bootstrap</a>
-                                with <a href="http://twitter.github.io/bootstrap/javascript.html#dropdowns">Dropdowns</a> plugin.
-                                Inspired by <a href="https://github.com/willywos/bangbang">BangBang</a><br/><br/>
-                                Supports template (de)normalization, custom template format.  Use it to build Underscore/Jade/Angularjs templates dynamically or whatever else
-                                you can think of.
-                            </p>
-                        </div>
-                        <div class="span2">
-
-                        </div>
-                    </div>
+            </div>
+          </div>
 
 
-                    <div class="span12" style="border-top: dashed;margin-top: 20px;margin-left: -5px;border-color: #9ddcff;">
-                        <h3>Try it </h3>
-                        <p>
-                            just start typing, '[' opens the tag menu where you want the tag to appear.
-                        <div class=" templar-example"></div>
-                        </p>
-                        <h3>Generates</h3>
-                        <pre id="template-example-computed"></pre>
+          <div class="span12" style="border-top: dashed;margin-top: 20px;margin-left: -5px;border-color: #9ddcff;">
+            <h3>Try it </h3>
+            <p>
+              just start typing, 'Ctrl+i' opens the tag menu where you want the tag to appear.
 
-                        <h3>How it works</h3>
+            <div class="templar-example"></div>
 
-                        Templar interpolates a bootstrap-dropdown into your text for easy template variable selection, invoked with
-                        a keypress. Once invoked, it opens the dropdown so search away.  Up/Down/Enter/Escape behaves intuitively.
-                        Attribute selection normalizes to a dot notation path or config controlled delimiter.  Eg : toppings > cheese  is <code>toppings.cheese</code> in the computed
-                        template.
-                        <br/><br/>
-                        To use, attach it to a target div
-                        <pre>
+            </p>
+            <h3>Generates</h3>
+            <pre id="template-example-computed"></pre>
+
+            <h3>How it works</h3>
+
+            Templar interpolates a select2 dropdown into your text for easy template variable selection, invoked with
+            a keypress. Once invoked, it opens the dropdown so search away.  Up/Down/Enter/Escape behaves intuitively.
+            Attribute selection normalizes to a dot notation path or config controlled delimiter.  Eg : toppings > cheese  is <code>toppings.cheese</code> in the computed
+            template.
+            <br/><br/>
+            To use, attach it to a target div
+            <pre>
 <code>
     $('.someclass').templar(
         {
             tags: {
-                'toplevel' : 
+                'toplevel' :
                     label : 'Top Level Label',
                     data : [
                         'sub selection 1',
@@ -88,45 +90,45 @@
             }
         }
     );</code>
-                        </pre>
-                        <br/>
-                        To extract the computed template :
-                        <pre>
+            </pre>
+            <br/>
+            To extract the computed template :
+            <pre>
     // compute the template
     example.templar('computeTemplate');
     // retrieve it
     alert(example.attr('data-template'));
-                        </pre>
+            </pre>
 
-                        <br/>
-                        or hook the event
-                        <pre>
+            <br/>
+            or hook the event
+            <pre>
 example.on('templar-template', function(ev) {
     console.log('template is now ' + $(this).attr('data-template));
 });
-                        </pre>
+            </pre>
 
-                        <div>
-                            <h4>Config</h4>
-                            Several config options are available for basic behavioral and template (de)normalizing customizations.
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>name</th>
-                                        <th>description</th>
-                                        <th>example</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>tags</td>
-                                        <td>
-                                            hierarchical data, up to depth 2 only for now
-                                            <br/><br/>
-                                            no default
-                                        </td>
-                                        <td>
-                                            <pre>
+            <div>
+              <h4>Config</h4>
+              Several config options are available for basic behavioral and template (de)normalizing customizations.
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>name</th>
+                    <th>description</th>
+                    <th>example</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>tags</td>
+                    <td>
+                      hierarchical data, up to depth 2 only for now
+                      <br/><br/>
+                      no default
+                    </td>
+                    <td>
+                      <pre>
     tags : {
         'toppings' : {
             'label' : 'Toppings',
@@ -147,7 +149,7 @@ example.on('templar-template', function(ev) {
                 label : 'Mood',
                 data : [
                     'fat',
-                    'sassy' 
+                    'sassy'
                 ]
             },
             'base' : {
@@ -159,174 +161,170 @@ example.on('templar-template', function(ev) {
                 ]
             }
     }
-                                            </pre>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>template</td>
-                                        <td>
-                                            Template pattern string literal<br/><br/>
-                                            default 'value'.
-                                        </td>
-                                        <td>
-                                            <code>template : '[%value%]'</code>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>templateKey</td>
-                                        <td>
-                                            Template key literal.  Value is interpolated into key literal.<br/><br/>
-                                            default 'value'.
-                                        </td>
-                                        <td>
-                                            <code>templateKey : 'value'</code>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>delimiter</td>
-                                        <td>Path Hierarchy Delimiter<br/><br/>
-                                            default '.'
-                                        </td>
-                                        <td>
-                                            <code>delimiter : '#'</code>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>data</td>
-                                        <td>Initial Template data<br/><br/>
-                                        </td>
-                                        <td>
-                                            <code>data : 'Hello [%name%]!'</code>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>keyEvent</td>
-                                        <td>Delimiter key event callback, event as first argument.<br/><br/>
-                                            default: '['
-                                            <code>
-                                                keyEvent : function(ev) {
-                                                return ev.keyCode === 219;
-                                                }</code>
-                                        </td>
-                                        <td>
-                                            <pre>
+                      </pre>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>template</td>
+                    <td>
+                      Template pattern string literal<br/><br/>
+                      default 'value'.
+                    </td>
+                    <td>
+                      <code>template : '[%value%]'</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>templateKey</td>
+                    <td>
+                      Template key literal.  Value is interpolated into key literal.<br/><br/>
+                      default 'value'.
+                    </td>
+                    <td>
+                      <code>templateKey : 'value'</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>delimiter</td>
+                    <td>Path Hierarchy Delimiter<br/><br/>
+                      default '.'
+                    </td>
+                    <td>
+                      <code>delimiter : '#'</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>data</td>
+                    <td>Initial Template data<br/><br/>
+                    </td>
+                    <td>
+                      <code>data : 'Hello [%name%]!'</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>keyEvent</td>
+                    <td>Delimiter key event callback, event as first argument.<br/><br/>
+                      default: '['
+                      <code>
+                        keyEvent : function(ev) {
+                        return ev.keyCode === 219;
+                        }</code>
+                    </td>
+                    <td>
+                      <pre>
     keyEvent : function(ev) {
         return ev.shiftKey && ev.keyCode === 220;
     }</pre>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>character</td>
-                                        <td>Character helper, hacks out previous delmiter after variable selection<br/><br/>
-                                            default '['
-                                        </td>
-                                        <td>
-                                            <code>character : '['</code>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <h4>Never Asked Questions</h4>
-
-                        <ul>
-                            <li><strong>Does this support text areas?</strong> Nope</li>
-                            <li><strong>How can I help?</strong>
-                                <br/>- Help me support
-                                <ul>
-                                    <li>Text Areas</li>
-                                    <li>Max input lengths</li>
-                                    <li>Template compute event callback</li>
-                                    <li>Ranging selections across text+tags</li>
-                                    <li>More intuitive keyboard navigation</li>
-                                </ul>
-                                and
-                                <ul>
-                                    <li>Find edge cases where this thing breaks down</li>
-                                </ul>
-                            </li>
-                        </ul>
-
-                        <div class="row">
-                            <h1 style="float: right;">Thanks! <small>- <a href="http://github.com/mjpearson">mjp</a></small></h1>
-                        </div>
-                    </div>
-
-
-
-                </section>
-
-                <aside id="sidebar">
-                    <a href="https://github.com/mjpearson/bootstrap-templar/zipball/master" class="button">
-                        <small>Download</small>
-                        .zip file
-                    </a>
-                    <a href="https://github.com/mjpearson/bootstrap-templar/tarball/master" class="button">
-                        <small>Download</small>
-                        .tar.gz file
-                    </a>
-                </aside>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>character</td>
+                    <td>Character helper, hacks out previous delmiter after variable selection<br/><br/>
+                      default '['
+                    </td>
+                    <td>
+                      <code>character : '['</code>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-        </div>
+
+            <div class="row">
+              <h1 style="float: right;">Thanks! <small>- <a href="http://github.com/mjpearson">mjp</a></small></h1>
+            </div>
+          </div>
 
 
-        <script src="jquery.min.js"></script>
-        <script src="bootstrap-dropdown.js"></script>
 
-        <script src="js/bootstrap-templar.js"></script>
+        </section>
 
-        <script type="text/javascript">
-            $(document).ready(function() {
-                var tagData = {
-                    'toppings' : {
-                        'label' : '<i class="icon-random"></i> Toppings',
-                        'data' : [
-                            {
-                                label : "Cheezzzze",
-                                value : 'cheezz'
-                            },
-                            'cheese',
-                            'tomatoes',
-                            'mozzarella',
-                            'mushrooms',
-                            'pepperoni',
-                            'onions'
-                        ]
-                    },
-                    'mood' : {
-                        label : '<i class="icon-random"></i> Mood',
-                        data : [
-                            'fat',
-                            'sassy'
-                        ]
-                    },
-                    'base' : {
-                        label : '<i class="icon-random"></i> Base',
-                        data : [
-                            'thin',
-                            'pie',
-                            'superthick'
-                        ]
-                    }
-                }
-
-                var example = $('.templar-example');
-                example.on('templar-template', function(ev) {
-                    $('#template-example-computed').html($(this).attr('data-template'));
-                });
-
-                example.templar(
-                {
-                    tags: tagData,
-                    template : '[%value%]',
-                    data : "I'm feeling [%mood.fat%]'n [%mood.sassy%] gimme a [%toppings.cheezz%][%toppings.cheese%] and [%toppings.tomatoes%] pizza on [%base.thin%] please!"
-                }
-            );
+        <aside id="sidebar">
+          <a href="https://github.com/mjpearson/bootstrap-templar/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/mjpearson/bootstrap-templar/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+        </aside>
+      </div>
+    </div>
 
 
-            });
-        </script>
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap-dropdown.js"></script>
+    <script src="select2.js"></script>
 
-    </body>
+    <script src="js/bootstrap-templar.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var tagData = {
+          'toppings' : {
+            'label' : 'Toppings',
+            'data' : [
+              {
+                label : "Cheezzzze",
+                value : 'cheese'
+              },
+              'tomatoes',
+              'mozzarella',
+              'mushrooms',
+              'pepperoni',
+              'onions'
+            ]
+          },
+          'mood' : {
+            label : 'Mood',
+            data : [
+              'fat',
+              'sassy'
+            ]
+          },
+          'base' : {
+            label : 'Base',
+            data : [
+              'thin',
+              'pie',
+              'superthick'
+            ]
+          }
+        }
+
+        var example = $('.templar-example');
+
+        example.on('templar-template', function(ev) {
+          $('#template-example-computed').html($(this).attr('data-template'));
+        });
+
+        example.templar(
+        {
+          tags: tagData,
+          template : '[%value%]',
+          data : "I'm feeling [%mood.fat%]'n [%mood.sassy%] gimme a [%toppings.cheese%] and [%toppings.tomatoes%] pizza on [%base.thin%] please!",
+          select2 : {
+            formatResult : function(obj) {
+              return obj.text;              
+            },
+            formatSelection : function(obj) {
+              return obj.text;
+            },
+            matcher : function(term, text, opt) {
+              var $parent = $(opt).parent();
+              return text.toUpperCase().indexOf(term.toUpperCase())>=0
+                || ($parent.attr('label') + ' ' + $parent.attr('data-pod')).toUpperCase().indexOf(term.toUpperCase())>=0;
+            },
+            escapeMarkup: function(m) { 
+              return m; 
+            },
+            placeholder: "Select a thing"
+          }
+        }
+      );
+      });
+    </script>
+
+  </body>
 </html>
